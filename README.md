@@ -6,4 +6,4 @@ Fast dictzip compression. Works in the browser and offline (bookmark the page or
 
 https://dictz.github.io/cc-cedict_converter.html
 
-Fast CC-CEDICT to StarDict/ MDict converter. 
+Fast CC-CEDICT to StarDict || MDict converter. 
