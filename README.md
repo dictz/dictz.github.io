@@ -12,3 +12,8 @@ Fast CC-CEDICT to StarDict || MDict converter.
 https://dictz.github.io/bkrs_converter.html?update=1
 
 大БКРС to StarDict || MDict converter. 
+
+
+https://dictz.github.io/dsl_converter.html?update=1
+
+Dictionary converter from DSL format to StarDict and MDict formats.
