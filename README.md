@@ -6,6 +6,7 @@ Fast DictZip* compression. Works in the browser and offline (bookmark the page o
 (*DictZip - GZip compression for random access, complies with RFC 1952 standard. https://sourceforge.net/projects/dict/, http://www.dict.org)
 
 
+
 https://dictz.github.io/cc-cedict_converter.html?update=2
 
 Fast CC-CEDICT to StarDict || MDict converter. 
