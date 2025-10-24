@@ -15,6 +15,6 @@ https://dictz.github.io/bkrs_converter.html?update=2
 大БКРС to StarDict || MDict converter. 
 
 
-https://dictz.github.io/dsl_converter.html?update=1
+https://dictz.github.io/dsl_converter.html?update=2
 
 Dictionary converter from DSL format to StarDict and MDict formats.
