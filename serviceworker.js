@@ -1,5 +1,5 @@
 'use strict';
-const CACHE_NAME = 'dictz_v2.0';
+const CACHE_NAME = 'dictz_v2.1';
 try {
 	self.addEventListener('install', function(event) {
 		try {
@@ -32,3 +32,4 @@ try {
 		} catch (er) {}
 	});
 } catch (er) {}
+
