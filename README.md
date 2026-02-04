@@ -10,7 +10,7 @@ https://dictz.github.io/cc-cedict_converter.html?update=4
 Fast CC-CEDICT to StarDict || MDict converter. 
 
 
-https://dictz.github.io/bkrs_converter.html?update=4
+https://dictz.github.io/bkrs_converter.html?update=5
 
 大БКРС to StarDict || MDict converter. 
 
