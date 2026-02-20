@@ -6,11 +6,11 @@ https://dictz.github.io
 <hr />
 https://dictz.github.io/cc-cedict_converter.html?update=4
 
-☝️Fast CC-CEDICT to StarDict || MDict converter. 
+☝️Fast CC-CEDICT to StarDict and MDict converter. 
 <hr />
 https://dictz.github.io/bkrs_converter.html?update=5
 
-☝️大БКРС to StarDict || MDict converter. 
+☝️大БКРС to StarDict and MDict converter. 
 <hr />
 https://dictz.github.io/dsl_converter.html?update=6
 
