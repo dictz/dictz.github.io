@@ -22,5 +22,5 @@
 
 ⭐️
 
-☝️CC-CEDICT, DSL and 大БКРС web viewers with the ability to embed dictionary databases (enter the «@export» option in the search field)
+☝️CC-CEDICT, DSL and 大БКРС html viewers with the ability to embed dictionary databases (enter the «@export» option in the search field)
 <hr />
