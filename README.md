@@ -20,7 +20,7 @@ Dictionary converter from DSL format to StarDict and MDict formats.
 
 ✅️https://dictz.github.io/dsl_viewer.html?update=1
 
-✅️
+✅️https://dictz.github.io/cedict_viewer.html?update=1
 
 CC-CEDICT, DSL and 大БКРС viewers with the ability to embed dictionary databases (enter the «@export» option in the search field)
 <hr />
