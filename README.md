@@ -1,5 +1,5 @@
 # dictz.github.io
-✅️https://dictz.github.io
+✅️https://dictz.github.io/index.html?update=4
 
 DictZip* compression. Works in the browser and offline (bookmark the page or download index.html ; *DictZip - GZip compression for random access, complies with RFC 1952 standard. https://sourceforge.net/projects/dict/, http://www.dict.org )
 
