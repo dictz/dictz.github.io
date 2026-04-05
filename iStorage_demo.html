@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iStorage demonstration</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0"/>
+<meta name="HandheldFriendly" content="True"/>
+<meta name="description" content="«iStorage» - super easy IndexedDB, how LocalStorage"/>
+
+<style>
+
+  * {
+    border-color: gray;
+    font-size: 1rem;
+    outline: none;
+    box-sizing: border-box;
+    white-space: pre;
+    font-family: 'monospace';
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    color: #000;
+    background-color: #dedede;
+  }
+
+  table tbody td {
+    padding: 15px;
+  }
+
+  table tbody td:nth-child(1) {
+    background-color: #333;
+    color: #ccc;
+  }
+
+  table tbody td:nth-child(1)::selection {
+    color: black;
+    background: yellow;
+  }
+
+  table tbody td:nth-child(3) {
+    min-width: 400px;
+  }
+
+  button {
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 16px 12px;
+  }
+
+  fieldset {
+    margin: 15px 5px;
+  }
+
+  legend {
+    font-weight: bold;
+  }
+
+</style>
+
+<script id="istorage_idscript" type="text/javascript"><!--show-->
+'use strict';
+//https://github.com/dictz 
+//https://gitflic.ru/user/dictz 
+
+async function iStorage(sid = 'iStorage_name') {
+let istorage = {};
+
+function iSCreate(sid) {///
+istorage.id = sid;
+istorage.dpfx = 'p__';
+return new Promise(function(res, rej) {try{
+  let idbRequest = window.indexedDB.open(`iStorage_${istorage.id}`, 1);
+
+  idbRequest.onupgradeneeded = function(e) {try{
+    istorage.idb = e.target.result;
+    if(!istorage.idb.objectStoreNames.contains(istorage.id)) istorage.idb.createObjectStore(istorage.id);
+    }catch(er){rej();}
+  };
+
+  idbRequest.onsuccess = function(e) {
+    istorage.idb = e.target.result;
+    istorage.idb.onversionchange = function() {istorage.idb.close();};
+    istorage.idb.onerror = function(e) {};
+    res();
+  };
+
+  idbRequest.onblocked = function() {try{rej();}catch(er){}};
+  idbRequest.onerror = function() {try{rej();}catch(er){}};
+
+  }catch(er){rej();}
+
+}).then(function() {
+  istorage.err = false;
+  return false;
+
+}, function() {
+  istorage.err = true;
+  return true;
+
+});
+};///
+
+if(await iSCreate(sid)) return true;
+
+istorage.setItem = function(item, x_data) {///
+item = String(item);
+return new Promise(function(res, rej) {try{
+  let th = istorage.idb.transaction(istorage.id, 'readwrite');
+  th.oncomplete = function() {res();};
+  th.onabort = function() {try{rej();}catch(er){}};
+
+  let obje = {};
+  obje[istorage.dpfx + item] = istorage.dpfx + item;
+  obje[item] = x_data;
+
+  let treq = th.objectStore(istorage.id).put(obje, istorage.dpfx + item);
+  treq.onsuccess = function() {};
+  treq.onerror = function() {try{rej();}catch(er){}};
+
+  }catch(er){rej();}
+
+}).then(function() {
+  istorage.err = false;
+  return false;
+
+}, function() {
+  istorage.err = true;
+  return true;
+
+});
+};///
+
+istorage.getItem = function(item) {///
+item = String(item);
+let val;
+return new Promise(function(res, rej) {try{
+  let th = istorage.idb.transaction(istorage.id, 'readonly');
+  th.oncomplete = function() {res(val);};
+  th.onabort = function() {try{rej();}catch(er){}};
+
+  let treq = th.objectStore(istorage.id).get(istorage.dpfx + item);
+  treq.onsuccess = function(e) {
+    try {
+      val = e.target.result[item];
+    } catch(er) {}
+  };
+  treq.onerror = function() {try{rej();}catch(er){}};
+
+  }catch(er){rej();}
+
+}).then(function(i) {
+  istorage.err = false;
+  return i;
+
+}, function() {
+  istorage.err = true;
+  return;
+
+});
+};///
+
+istorage.removeItem = function(item) {///
+item = String(item);
+return new Promise(function(res, rej) {try{
+  let th = istorage.idb.transaction(istorage.id, 'readwrite');
+  th.oncomplete = function() {res();};
+  th.onabort = function() {try{rej();}catch(er){}};
+
+  let treq = th.objectStore(istorage.id).delete(istorage.dpfx + item);
+  treq.onsuccess = function() {};
+  treq.onerror = function() {try{rej();}catch(er){}};
+
+  }catch(er){rej();}
+
+}).then(function() {
+  istorage.err = false;
+  return false;
+
+}, function() {
+  istorage.err = true;
+  return true;
+
+});
+};///
+
+istorage.clear = function() {///
+return new Promise(function(res, rej) {try{
+  let th = istorage.idb.transaction(istorage.id, 'readwrite');
+  th.oncomplete = function() {res();};
+  th.onabort = function() {try{rej();}catch(er){}};
+
+  let treq = th.objectStore(istorage.id).clear();
+  treq.onsuccess = function() {};
+  treq.onerror = function() {try{rej();}catch(er){}};
+
+  }catch(er){rej();}
+
+}).then(function() {
+  istorage.err = false;
+  return false;
+
+}, function() {
+  istorage.err = true;
+  return true;
+
+});
+};///
+
+istorage.delete = function() {///
+return new Promise(function(res, rej) {try{
+  let idbRequest = window.indexedDB.deleteDatabase(`iStorage_${istorage.id}`);
+  idbRequest.onsuccess = function(e) {res();};
+  idbRequest.onerror = function() {rej();};
+  }catch(er){rej();}
+
+}).finally(function() {
+  for(let key in istorage) delete istorage[key];
+
+}).then(function() {
+  return false;
+
+}, function() {
+  return true;
+
+});
+};///
+
+return istorage;
+}
+</script><!--*-->
+
+<script type="text/javascript"><!--show-->
+'use strict';
+function xeval(t, r = false) {
+  let par = t.parentNode.parentNode;
+  let td0 = par.childNodes[0];
+  let td2 = par.childNodes[2];
+  if(r) for(let i of par.parentNode.childNodes) i.childNodes[2].textContent = '';
+
+  td2.textContent = '⏳';
+  function erralert(er) {td2.textContent = '⚠️\n' + er;}
+
+  try {
+    eval(td0.textContent.trim()).then(
+      function(res) {td2.textContent = String(res);}
+    ).catch(erralert);
+  } catch(er) {erralert(er);}
+}
+window.addEventListener('load', function() {
+  document.getElementsByTagName('body')[0].innerHTML = template_id.innerHTML.replace(/(?<=\>)[\s]+?(?=\<)/g, '').replace(/\r/g, '').trim();
+  function hashttp() {return /^http/.test(String(window.location));}
+  function toggleditable() {
+    for(let n of document.getElementsByTagName('tbody')[0].childNodes) {
+      if(!navigator.onLine || !hashttp()) n.childNodes[0].setAttribute('contenteditable', 'true');
+      else n.childNodes[0].removeAttribute('contenteditable');
+    }
+  }
+  if(hashttp()) {
+    window.addEventListener('offline', toggleditable);
+    window.addEventListener('online', function() {
+      window.name = 'iStorage_demo';
+      window.open(window.location, window.name);
+    });
+  }
+  toggleditable();
+});
+</script><!--*-->
+
+<template id="template_id"><!--show-->
+
+<fieldset>
+<legend>Демонстрация iStorage</legend>
+Вариант сочетания возможностей <i>IndexedDB</i> с простотой <i>LocalStorage</i>&nbsp;
+<a target="_blank" href="https://github.com/dictz">GitHub</a>, <a target="_blank" href="https://gitflic.ru/user/dictz">GitFlic</a>
+
+Функции iStorage (асинхронны) :
+
+  • obj = await <b>iStorage('Имя хранилища')</b> — Создаёт или открывает хранилище. В случае ошибки вернёт <b>true</b> ;
+
+  • obj<b>.setItem('имя данных', данные)</b>     — Сохраняет данные (допустимые для IndexedDB <b>*</b>) ;
+  • obj<b>.getItem('имя данных')</b>             — Возвращает данные или undefined ;
+  • obj<b>.removeItem('имя данных')</b>          — Удаляет данные ;
+  • obj<b>.clear()</b>  — Очищает хранилище ;
+  • obj<b>.delete()</b> — Удаляет хранилище ;
+
+  • obj<b>.err</b>      — Хранит состояние последнего обращения к indexedDB:
+                   <b>true</b> - была ошибка; <b>false</b> - ошибки небыло.
+                   Это значение возвращается всеми obj.функция(ми) кроме <b>getItem</b>.
+
+<b>*</b> Допустимые типы данных: <i>number, string, boolean, array, object</i> и другие.
+  <i>array</i> и <i>object</i> могут содержать только допустимые типы данных.
+  Недопустимые типы данных: <i>function</i> и другие. Подробнее в документации IndexedDB.
+
+Ниже примеры с комментариями, код можно редактировать и выполнять.
+В целях ограничения возможностей выполнения, редактирование становится доступным
+только при отключении интернет-соединения или если html открыт с диска вашего ПК.
+
+</fieldset>
+
+<table border="1"><tbody>
+
+<tr>
+<td>(async function() {
+
+  // Создание или открытие хранилища
+  globalThis.istorage = await iStorage('My indexedDB Storage 1');
+  if(istorage === true) return;
+
+  // Можно создавать или открывать много хранилищ
+  globalThis.istorage2 = await iStorage('My indexedDB Storage 2');
+  if(istorage2 === true) return;
+
+  return [istorage.err, istorage2.err];
+
+})();</td>
+<td><button onclick="xeval(this,true);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Можно сохранять допустимые типы данных
+  // Сохранение строки
+  return await istorage.setItem('my string', '2026 year');
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Извлечение из хранилища
+  let val = await istorage.getItem('my string');
+  return [typeof val, val];
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Сохранение числа
+  return await istorage2.setItem('my number', 2026);
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  let val = await istorage2.getItem('my number');
+  return [typeof val, val];
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Сохранение объекта
+  // Объект должен содержать допустимые типы данных
+  return await istorage.setItem('my object', {property:'qwerty',});
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  let val = await istorage.getItem('my object');
+  return [typeof val, JSON.stringify(val)];
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Сохранение массива
+  // Массив должен содержать допустимые типы данных
+  return await istorage2.setItem('my array', ['2026',2026,true,]);
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  let val = await istorage2.getItem('my array');
+  return ['isArray:' + Array.isArray(val), JSON.stringify(val)];
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  return await istorage.setItem('my boolean', true);
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  let val = await istorage.getItem('my boolean');
+  return [typeof val, String(val)];
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Удаление из хранилища
+  return await istorage.removeItem('my boolean');
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Чтение несуществующего вернёт undefined
+  return await istorage.getItem('ghost_item');
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Попытка сохранить недопустимый тип данных
+  return await istorage2.setItem('my function', function(){alert(5);} );
+
+})();</td>
+<td><button onclick="xeval(this);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Очищение хранилищ
+  return [await istorage.clear(), await istorage2.clear()];
+
+})();</td>
+<td><button onclick="xeval(this,true);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+<tr>
+<td>(async function() {
+
+  // Удаление хранилищ
+  return [await istorage.delete(), await istorage2.delete()];
+
+})();</td>
+<td><button onclick="xeval(this,true);">=&gt; eval =&gt;</button></td>
+<td></td>
+</tr>
+
+</tbody></table>
+
+</template><!--*-->
+
+</head>
+<body></body>
+</html>
